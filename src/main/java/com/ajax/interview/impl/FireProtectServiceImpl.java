@@ -25,7 +25,7 @@ public class FireProtectServiceImpl implements FireProtectService {
         devices.putIfAbsent(deviceId, new Device());
         Device device = devices.get(deviceId);
         int currentTemp = device.changeTemperature(temperatureDiff);
-        if (currentTemp > 80 || temperatureDiff > 20) {
+        if (device.getState() == State.ARMED && (currentTemp > 80 || temperatureDiff > 20)) {
             departments.forEach(fireDepartment -> fireDepartment.alarm(deviceId));
         }
     }
