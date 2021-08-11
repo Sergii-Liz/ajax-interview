@@ -28,7 +28,7 @@ public interface FireProtectService {
 
     void changeTemperature(String deviceId, int temperatureDiff);
 
-    int getState(String deviceId);
+    State getState(String deviceId);
 
     int getTemperature(String deviceId);
 
