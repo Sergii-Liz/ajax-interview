@@ -13,24 +13,25 @@ public class FireProtectServiceImplTest extends MultithreadedTestCase {
 
     private FireDepartment stub1 = Mockito.mock(FireDepartment.class);
 
-    private FireProtectService underTest;
+    private FireProtectServiceImpl underTest;
 
     @Override
     public void initialize() {
         underTest = new FireProtectServiceImpl();
         underTest.registerFireDepartment(stub1);
-    }
-
-    public void thread1() throws InterruptedException {
         underTest.changeState("1", State.ARMED);
     }
 
+    public void thread1() throws InterruptedException {
+        underTest.changeTemperature("1", 20);
+    }
+
     public void thread2() throws InterruptedException {
-        underTest.changeState("1", State.DISARMED);
+        underTest.changeTemperature("1", 20);
     }
 
     public void thread3() throws InterruptedException {
-        underTest.changeTemperature("1", 30);
+        underTest.changeTemperature("1", 20);
     }
 
     public void thread4() throws InterruptedException {
@@ -45,6 +46,8 @@ public class FireProtectServiceImplTest extends MultithreadedTestCase {
     @Override
     public void finish() {
         Mockito.verify(stub1, Mockito.times(2)).alarm("1");
+        Mockito.reset(stub1);
+        underTest.stop();
     }
 
     @Test
